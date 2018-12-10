@@ -19,7 +19,7 @@ class APIBase{
 }
 class ChatAPI extends APIBase{
 	function auth($id, $pw){
-		$sql = "SELECT userid, pw FROM user WHERE userid=?";
+		$sql = "SELECT userid, pw, name FROM user WHERE userid=?";
 		try{
 			$dbh = connectDB();   //接続
 			$sth = $dbh->prepare($sql);            //SQL準備
@@ -27,6 +27,9 @@ class ChatAPI extends APIBase{
 		   $buff = $sth->fetch(PDO::FETCH_ASSOC);
 		   
 		   if( $buff && $buff["pw"] === $pw){
+		   		session_start();
+		   		$_SESSION['id']   = $id;
+		   		$_SESSION['name'] = $buff['name'];		   		
 		   		$flag = true;
 		   }
 		   else{
@@ -42,7 +45,9 @@ class ChatAPI extends APIBase{
 		$result = [];
 		$value = [];
 		if($name === null){
-			$sql = 'SELECT * FROM log';
+			$sql =    'SELECT name, message, log.time '
+			        . 'FROM   log, user '
+			        . 'WHERE  log.userid=user.userid';
 		}
 		else{
 			$sql = "SELECT * FROM log WHERE name=?";
@@ -75,14 +80,19 @@ class ChatAPI extends APIBase{
 		
 		$this->sendjson($flag, $result);
 	}
-	function set($name, $message){
-		$sql = 'INSERT INTO log(name,message,time) VALUES(?,?,?)';
+	function set($message){
+		session_start();
+		if( !array_key_exists('id', $_SESSION) ){
+			$this->sendjson(false);
+			return(false);
+		}
+		$sql = 'INSERT INTO log(userid,message,time) VALUES(?,?,?)';
 		try{
 			$dbh = connectDB();                 //接続
 			$dbh->beginTransaction();
 			$sth = $dbh->prepare($sql);         //SQL準備
 			$sth->execute([  						 //実行
-					  $name
+					  $_SESSION['id']
 					, $message
 					, date("Y-m-d H:i:s", time())]
 			);
