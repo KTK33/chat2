@@ -18,6 +18,26 @@ class APIBase{
 	}
 }
 class ChatAPI extends APIBase{
+	function auth($id, $pw){
+		$sql = "SELECT userid, pw FROM user WHERE userid=?";
+		try{
+			$dbh = connectDB();   //接続
+			$sth = $dbh->prepare($sql);            //SQL準備
+			$sth->execute([$id]);                  //実行
+		   $buff = $sth->fetch(PDO::FETCH_ASSOC);
+		   
+		   if( $buff && $buff["pw"] === $pw){
+		   		$flag = true;
+		   }
+		   else{
+		   		$flag = false;
+		   }
+		}
+		catch( PDOException $e ){
+			$flag = false;
+		}
+		$this->sendjson($flag);
+	}
 	function get($name=null){
 		$result = [];
 		$value = [];
