@@ -48,13 +48,12 @@ window.onload = function(){
 		if (request.status === 200 || request.status === 304 ) {
 			var response = request.responseText;
 			var json     = JSON.parse(response);
-		    if( json["head"]["status"] === false ){
-		    	alert("書き込みに失敗したよ");
-		    	return(false);
-		    }
-		    else{
-		    	getLog();
-		    }
+			
+			if( json["head"]["status"] === false ){
+				alert("失敗しました");
+				return(false);	
+			}
+		    getLog();
 		}
 		else if(request.status >= 500){
 			alert("ServerError");
@@ -75,9 +74,9 @@ function getLog(){
 			var response = request.responseText;
 			var json     = JSON.parse(response);
 			
-			if(json["head"]["status"] === false){
+			if( json["head"]["status"] === false ){
 				alert("失敗しました");
-				return(false);
+				return(false);	
 			}
 		
 			var html="";
