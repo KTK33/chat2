@@ -8,30 +8,58 @@
 	<title>チャット</title>
 	<style>
 		h1{
-			font-size:12pt;
-			border-bottom: 1px solid gray;
-			color: blue;
+			font-size:32pt;
+			position:relative;
+			border-top: 2px groove blue;
+			border-bottom: 2px ridge blue;
+			border-left: 2px groove blue;
+			border-right: 2px ridge blue;
+
+			margin :  10px auto;
+			width : 500px;
+		
+			background : blue;
+			
+			color: aqua;
 		}
 		form{
-			border: 1px solid gray;
+			border: 3px dashed pink;
 			padding: 10px;
-			margin-bottom: 15px;
+			margin-bottom: 30px;
 		}
 		.timestamp{
-			color: lightgray;
+			color: blue;
 			font-size: 8pt;
 		}
+		
+		.center{
+		text-align: center;
+		}
+
+		button{
+			position: relative;
+   			display: inline-block;
+    		padding: 0.25em 0.5em;
+    		text-decoration: none;
+    		color: white;
+    		background: orange;
+    		border-radius: 4px;
+    		box-shadow: inset 0 2px 0 rgba(255,255,255,0.2), inset 0 -2px 0 rgba(0, 0, 0, 0.05);
+    		font-weight: bold;
+    		border: solid 2p green;
+		}
+		
 	</style>
 </head>
 <body>
 
-<h1>秘密のチャット</h1>
-<form>
+<h1 class = "center">秘密のチャット</h1>
+<form class = "center">
 	<?php
 		echo $_GET['uname'];
 	?>
 	<input type="hidden" id="uname" value="<?= $_GET['uname'] ?>">
-	<input type="text" id="msg">
+	<input type="text" id="msg" value = "" placeholder = "コメントを入力" style = "background-color:pink; color:black;">
 	<button type="button" id="sbmt">送信</button>
 </form>
 
